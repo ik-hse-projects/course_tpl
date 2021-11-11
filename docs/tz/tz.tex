@@ -1,0 +1,148 @@
+\documentclass[12pt,a4paper]{article}
+
+% Языки, которые могут быть использованы.
+\usepackage[russian,english]{babel}
+
+% FreeSerif — альтернатива TimesNewRoman, которая идёт в комплекте с линуксом.
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures={TeX}} 
+\setmainfont[Ligatures={TeX,Historic}]{FreeSerif}
+
+% Чтобы сделать буковки ещё красивее.
+\usepackage{microtype}
+
+% Чтобы легко менять стиль списков
+\usepackage{enumerate}
+
+\usepackage{csquotes}
+% https://qna.habr.com/answer?answer_id=1140867
+\bibliographystyle{gost2008}
+\usepackage[
+	style=gost-numeric, % стиль цитирования и библиографии, см. документацию biblatex-gost
+	language=auto,  % использовать язык из babel
+	autolang=other, % многоязычная библиография
+	parentracker=true,
+	backend=biber,
+	hyperref=false,
+	bibencoding=utf8,
+	defernumbers=true,
+]{biblatex}
+\addbibresource{bibliography.bib}
+
+% Отсупы как по госту.
+\usepackage[
+	includeheadfoot,
+	left=20mm,
+	right=10mm,
+	top=0mm,
+	headheight=25mm,
+	% Так, чтобы нижняя табличка влезла.
+	bottom=6\baselineskip,
+	footskip=5\baselineskip,
+]{geometry}
+
+\savegeometry{original}
+\geometry{bottom=10mm}
+\savegeometry{nofooter}
+\loadgeometry{original}
+
+\input{settings.tex}
+
+% Footer and header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\chead{
+	%\bf % Сделать жирненьким
+	\thepage\\
+	\docId
+}
+\cfoot{%
+	\begin{tabular}{| l | l | l | l | l |}
+		\hline & & & & \\
+		\hline Изм. & Лист & № докум. & Подп. & Дата \\
+		\hline \docId &  &  &  &  \\
+		\hline Инв. № подл. & Подп. и дата & Взам. инв. № & Инв. № дубл. & Подп. и дата № \\
+		\hline
+	\end{tabular}
+}
+\fancypagestyle{nofooter}{%
+	\fancyfoot{}%
+}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Добавляем гипертекстовое оглавление в PDF
+\usepackage[hidelinks]{hyperref}
+
+% Картинки, вращение и всё такое.
+\usepackage{graphicx}
+
+% Повернуть на 90 градусов
+\newcommand{\rot}[2]{\rotatebox[origin=c]{90}{\enspace\parbox{#1 - 0.5em}{#2}}}
+
+% Повторить #1 раз текст #2: \Repeat{#1}{#2}
+\usepackage{expl3}
+\ExplSyntaxOn
+\cs_new_eq:NN \Repeat \prg_replicate:nn
+\ExplSyntaxOff
+
+% Продвинутые таблицы
+\usepackage{tabularx}
+\usepackage{multirow}
+% И сразу делаем чтобы колонки X центрировались по вертикали
+\def\tabularxcolumn#1{m{#1}}
+
+% Подсчет числа страниц
+\usepackage{lastpage}
+
+% Расчет всяких размеров
+\usepackage{calc}
+
+% Названия разделов по центру
+\usepackage{titlesec}
+\titleformat*{\section}{\centering\Large\bfseries}
+% И с точкой в конце.
+\titlelabel{\thetitle.\quad}
+
+% Посел названия раздела надо делать отступы у абзацев.
+\usepackage{indentfirst}
+
+% https://tex.stackexchange.com/a/347803
+\usepackage{varwidth}
+
+\newcommand{\placename}{
+	\underline{\hspace{4cm}}
+}
+\newcommand{\placedate}{
+	«\underline{\hspace{1em}}» \underline{\hspace{3cm}} 2021 г.
+}
+
+\begin{document}
+	\selectlanguage{russian}
+
+	\input{titul/main.tex}
+	
+	% На всякий случай, хотя вообще не очень нужно.
+	\loadgeometry{original}
+	
+	\input{content/annotation.tex}
+	
+	\clearpage
+		\renewcommand*\contentsname{\centering СОДЕРЖАНИЕ}
+		\tableofcontents
+	\clearpage
+
+	\input{content/introduction.tex}
+	\input{content/reasons.tex}
+	\input{content/goals.tex}
+	\input{content/requirements.tex}
+	\input{content/docs.tex}
+	\input{content/economy.tex}
+	\input{content/stages.tex}
+	\input{content/checklist.tex}
+	\input{content/bibliography.tex}
+	
+	\input{changes.tex}
+\end{document}
