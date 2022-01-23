@@ -20,12 +20,10 @@
 # *.ps
 # *.eps
 # *.pdf
+/tz.pdf
 
 ## Generated if empty string is given at "Please type another file name for output:"
-.pdf
-
-## Generated output file
-tz.pdf
+.pd
 
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
 *.bbl
